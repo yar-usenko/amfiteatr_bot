@@ -76,5 +76,12 @@
     "is_bot": false,
     "first_name": "Karpenko Daria",
     "language_code": "ru"
+  },
+  "1115111023": {
+    "id": 1115111023,
+    "is_bot": false,
+    "first_name": "Стройматериалы",
+    "last_name": "на Силикатном",
+    "language_code": "en"
   }
 }

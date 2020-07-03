@@ -1,0 +1,32 @@
+version: "3"
+services:
+  bot:
+    container_name: api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - database
+      - cache
+    command: ['npm', 'start']
+
+  database:
+    image: mongo:4.2.8
+    container_name: database
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: amfi
+      MONGO_INITDB_ROOT_USERNAME: amfi
+      MONGO_INITDB_ROOT_PASSWORD: pass
+
+  cache:
+    image: "redis:alpine"
+    container_name: cache
+    restart: always
+    entrypoint: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+
+volumes:
+  redis-data:
