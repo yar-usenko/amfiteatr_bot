@@ -1,15 +1,43 @@
 {
   "name": "amphitheater_bot",
-  "version": "0.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
+  "private": true,
   "author": "Yaroslav Usenko <usenko.jaroslav@gmail.com> (https://usenko.pp.ua)",
   "license": "MIT",
+  "scripts": {
+    "develop": "cross-env NODE_ENV=development nodemon --exec babel-node -r dotenv/config src/index.js",
+    "build": "cross-env NODE_ENV=production babel src --out-dir dist --copy-files --no-copy-ignored --source-maps inline",
+    "start": "cross-env NODE_ENV=development node -r dotenv/config dist",
+    "format": "eslint . --fix --cache --cache-location=./node_modules/.cache/eslint"
+  },
   "dependencies": {
+    "dotenv": "^8.2.0",
     "telegraf": "^3.38.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.10.4",
+    "@babel/core": "^7.10.4",
+    "@babel/node": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "babel-eslint": "^10.1.0",
+    "babel-preset-minify": "^0.5.1",
+    "cross-env": "^7.0.2",
+    "eslint": "^7.3.1",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-babel": "^5.3.1",
+    "eslint-plugin-import": "^2.22.0",
+    "husky": "^4.2.5",
+    "imagemin-lint-staged": "^0.4.0",
+    "lint-staged": "^10.2.11",
+    "nodemon": "^2.0.4"
+  },
+  "lint-staged": {
+    "*.js": "npm run format",
+    "*.{png,jpeg,jpg,gif,svg}": "imagemin-lint-staged"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "post-commit": "git update-index --again"
+    }
   }
 }

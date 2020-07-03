@@ -1,5 +1,7 @@
 # dotenv environment variables file
+.env
 .env.*
+!.env.example
 
 # Build Files
 bin
