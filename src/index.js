@@ -24,13 +24,13 @@ const isAdmin = (userId) => config.admins.includes(userId);
 
 const forwardToAdmin = async (ctx) => {
   if (isAdmin(ctx.message.from.id)) {
-      ctx.reply('Для ответа пользователю используйте функцию Ответить/Reply.');
+    await ctx.reply('Для ответа пользователю используйте функцию Ответить/Reply.');
   } else {
     await Promise.all(
       config.admins
-        .filter((adminId) => ctx.from.id !== adminId)
         .map((adminId) => ctx.forwardMessage(adminId, ctx.from.id, ctx.message.id)),
     );
+  }
 };
 
 bot.use(async (ctx, next) => {
@@ -65,6 +65,11 @@ bot.on('message', async (ctx) => {
         && ctx.message.reply_to_message.forward_from
         && isAdmin(ctx.message.from.id)) {
     await ctx.telegram.sendCopy(ctx.message.reply_to_message.forward_from.id, ctx.message);
+    await Promise.all(
+      config.admins
+        .filter((adminId) => adminId !== ctx.message.from.id)
+        .map((adminId) => ctx.telegram.sendCopy(adminId, ctx.message)),
+    );
   } else {
     await forwardToAdmin(ctx);
   }
