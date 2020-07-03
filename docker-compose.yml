@@ -5,28 +5,28 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    restart: always
-    depends_on:
-      - database
-      - cache
     command: ['npm', 'start']
+    # restart: always
+    # depends_on:
+    #   - database
+    #   - cache
 
-  database:
-    image: mongo:4.2.8
-    container_name: database
-    restart: always
-    environment:
-      MONGO_INITDB_DATABASE: amfi
-      MONGO_INITDB_ROOT_USERNAME: amfi
-      MONGO_INITDB_ROOT_PASSWORD: pass
+#   database:
+#     image: mongo:4.2.8
+#     container_name: database
+#     restart: always
+#     environment:
+#       MONGO_INITDB_DATABASE: amfi
+#       MONGO_INITDB_ROOT_USERNAME: amfi
+#       MONGO_INITDB_ROOT_PASSWORD: pass
 
-  cache:
-    image: "redis:alpine"
-    container_name: cache
-    restart: always
-    entrypoint: redis-server --appendonly yes
-    volumes:
-      - redis-data:/data
+#   cache:
+#     image: "redis:alpine"
+#     container_name: cache
+#     restart: always
+#     entrypoint: redis-server --appendonly yes
+#     volumes:
+#       - redis-data:/data
 
-volumes:
-  redis-data:
+# volumes:
+#   redis-data:

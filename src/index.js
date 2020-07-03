@@ -23,14 +23,14 @@ const bot = new Telegraf(config.token);
 const isAdmin = (userId) => config.admins.includes(userId);
 
 const forwardToAdmin = async (ctx) => {
-  const reply = ctx.message.reply_to_message;
-
-  await Promise.all(
-    config.admins
-      .filter((adminId) => ctx.from.id !== adminId && (reply
-        && reply.forward_from && reply.forward_from.id !== adminId))
-      .map((adminId) => ctx.forwardMessage(adminId, ctx.from.id, ctx.message.id)),
-  );
+  if (isAdmin(ctx.message.from.id)) {
+      ctx.reply('Для ответа пользователю используйте функцию Ответить/Reply.');
+  } else {
+    await Promise.all(
+      config.admins
+        .filter((adminId) => ctx.from.id !== adminId)
+        .map((adminId) => ctx.forwardMessage(adminId, ctx.from.id, ctx.message.id)),
+    );
 };
 
 bot.use(async (ctx, next) => {
@@ -65,7 +65,6 @@ bot.on('message', async (ctx) => {
         && ctx.message.reply_to_message.forward_from
         && isAdmin(ctx.message.from.id)) {
     await ctx.telegram.sendCopy(ctx.message.reply_to_message.forward_from.id, ctx.message);
-    await forwardToAdmin(ctx);
   } else {
     await forwardToAdmin(ctx);
   }
